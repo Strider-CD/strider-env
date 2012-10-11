@@ -1,0 +1,18 @@
+{
+  "name": "strider-env",
+  "version": "0.1.0",
+  "description": "Configure custom environment variables for your Strider projects",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/Strider-CD/strider-env.git"
+  },
+  "keywords": [
+    "strider"
+  ],
+  "author": "Niall O'Higgins",
+  "license": "BSD"
+}
