@@ -26,11 +26,12 @@ module.exports = function(ctx, cb) {
       if (err) {
         return error("Error fetching Repo Config for url " + url + ": " + err)
       }
-      if (!repo.env) repo.env = {}
+      var results = repo.get('env')
+      if (!results) results = {}
       var r = {
         status: "ok",
         errors: [],
-        results: repo.get('env')
+        results: results
       }
       return res.end(JSON.stringify(r, null, '\t'))
     })
