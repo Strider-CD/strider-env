@@ -26,12 +26,11 @@ module.exports = function(ctx, cb) {
       if (err) {
         return error("Error fetching Repo Config for url " + url + ": " + err)
       }
-      repo = repo.toJSON()
       if (!repo.env) repo.env = {}
       var r = {
         status: "ok",
         errors: [],
-        results: repo.env
+        results: repo.get('env')
       }
       return res.end(JSON.stringify(r, null, '\t'))
     })
@@ -74,7 +73,6 @@ module.exports = function(ctx, cb) {
             "You must have access level greater than 0 in order to be able to configure environment variables.",
             403)
       }
-      var q = {$set:{}, $unset:{}}
       var invalid = false
       try {
         env = JSON.parse(env)
@@ -88,12 +86,6 @@ module.exports = function(ctx, cb) {
         return error("Error decoding `env` parameter - must be JSON-encoded object")
       }
       repo.env = env
-      if (Object.keys(env).length === 0) {
-        q['$unset']['github_config.$.env'] = 1
-
-      } else {
-        q['$set']['github_config.$.env'] = env
-      }
       var r = {
         status: "ok",
         errors: [],
@@ -101,12 +93,13 @@ module.exports = function(ctx, cb) {
           env:env
         }
       }
-      ctx.models.User.update({"github_config.url":repo.url}, q, function(err) {
-          if (err) {
-            var errmsg = "Error saving environment config " + req.user.email + ": " + err;
-            return error(errmsg)
-          }
-          return res.end(JSON.stringify(r, null, '\t'))
+      repo.set('env', env)
+      req.user.save(function(err) {
+        if (err) {
+          var errmsg = "Error saving environment config " + req.user.email + ": " + err;
+          return error(errmsg)
+        }
+        return res.end(JSON.stringify(r, null, '\t'))
       })
     })
 
