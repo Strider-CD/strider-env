@@ -125,10 +125,11 @@ module.exports = function(ctx, cb) {
   // Add panel HTML snippet for project config page
   ctx.registerPanel('project_config', {
     src: path.join(__dirname, "templates", "project_config.html"),
+    plugin_name: 'strider-env',
     title: "Environment",
     id:"environment",
+    controller: 'EnvironmentCtrl'
   })
-
 
   console.log("strider-env webapp extension loaded")
   cb(null, null)
