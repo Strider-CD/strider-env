@@ -1,4 +1,56 @@
 var path = require('path')
+  , _ = require('lodash')
+
+function modifyEnv(changefn) {
+  var name = changefn.name
+  return function (req, res) {
+    var url = req.param('url')
+    function error(text, code) {
+      console.error('Strider-Env: %s() - %s', name, text)
+      res.statusCode = code || 400
+      return res.end(JSON.stringify({
+        errors: [text],
+        status: 'error'
+      }, null, '\t'));
+    }
+    req.user.get_repo_config(url, function (err, repo, level, user) {
+      if (err) return error('Failed to fetch repo config for ' + url + ': ' + err.message)
+      return changefn(req, res, repo, user, error)
+    })
+  }
+}
+
+// to be wrapped by modifyEnv
+function deleteEnv(req, res, repo, user, error) {
+  var key = req.param('key')
+    , env = _.extend({}, repo.get('env'))
+  if (!env[key]) return error('Key not found')
+  delete env[key]
+  repo.set('env', env)
+  user.save(function(err) {
+    if (err) {
+      var errmsg = "Error saving environment config " + user.email + ": " + err;
+      return error(errmsg)
+    }
+    return res.end(JSON.stringify({status: 'ok'}, null, '\t'))
+  })
+};
+
+// to be wrapped by modifyEnv
+function addEnv(req, res, repo, user, error) {
+  var key = req.param('key')
+    , val = req.param('val')
+    , env = _.extend({}, repo.get('env'))
+  env[key] = val
+  repo.set('env', env)
+  user.save(function(err) {
+    if (err) {
+      var errmsg = "Error saving environment config " + user.email + ": " + err;
+      return error(errmsg)
+    }
+    return res.end(JSON.stringify({status: 'ok'}, null, '\t'))
+  })
+}
 
 module.exports = function(ctx, cb) {
   /*
@@ -105,7 +157,7 @@ module.exports = function(ctx, cb) {
     })
 
   }
-  // Extend RepoConfig model with 'Sauce' properties
+  // Extend RepoConfig model with 'Env' properties
   function envPlugin(schema, opts) {
     schema.add({
       env: {}
@@ -113,22 +165,29 @@ module.exports = function(ctx, cb) {
   }
   ctx.models.RepoConfig.plugin(envPlugin)
   // Add webserver routes
+  // this one is currently unused.
   ctx.route.get("/api/env",
     ctx.middleware.require_auth,
     ctx.middleware.require_params(["url"]),
     getEnv)
+  // add and remove env variables
   ctx.route.post("/api/env",
     ctx.middleware.require_auth,
-    ctx.middleware.require_params(["env"]),
-    postEnv)
+    ctx.middleware.require_params(['url', 'key', 'val']),
+    modifyEnv(addEnv))
+  ctx.route.delete('/api/env',
+    ctx.middleware.require_admin,
+    ctx.middleware.require_params(['url', 'key']),
+    modifyEnv(deleteEnv))
 
   // Add panel HTML snippet for project config page
   ctx.registerPanel('project_config', {
     src: path.join(__dirname, "templates", "project_config.html"),
+    controller: 'EnvironmentCtrl',
     plugin_name: 'strider-env',
     title: "Environment",
     id:"environment",
-    controller: 'EnvironmentCtrl'
+    data: 'env'
   })
 
   console.log("strider-env webapp extension loaded")

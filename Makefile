@@ -4,7 +4,7 @@ HTML = $(JADE:.jade=.html)
 all: $(HTML)
 
 %.html: %.jade
-	jade < $< --path $< > $@
+	jade -P < $< --path $< > $@
 
 clean:
 	rm -f $(HTML)

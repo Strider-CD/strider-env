@@ -1,3 +1,47 @@
-<div id="confirm-remove-env-modal" class="modal fade"></div><script id="confirm-remove-env-template" type="text/template" class="template"><div class="modal-header"><button data-dismiss="modal" class="close"></button><x></x><h3>Remove <%= key %></h3></div><div class="modal-body"><p>Are you sure you want to remove <%= key %> environment variable from  <%= display_name %>?</p></div><div class="modal-footer"><a data-dismiss="modal" class="btn">No</a><a class="btn btn-primary">Yes, I'm sure</a></div></script><script id="env-none" type="text/template" class="template"><tr><td><p>No environment variables configured.</p></td></tr></script><script id="env-loading" type="text/template" class="template"><tr><td><p>Loading environment variables...</p></td></tr></script><script id="env-header" type="text/template" class="template"><tr><th>Key</th><th>Value</th></tr></script><script id="env-table-row" type="text/template" class="template"><tr><td><%= key %></td><td><%= value %></td><td><a data-toggle="modal" href="#confirmRemoveEnv">
-  <i class="icon-remove" id="<%= uuid %>" alt="remove"></i>
-</a></td></tr></script><div id="env" data-widget="/ext/strider-env/env.js" class="tab-pane widget"><div class="span8"><div class="well"><fieldset><legend>Environment Variables</legend><div class="alert alert-success hide"></div><p>Set custom environment variables to be exported for your test runs. This can be useful for storing configuration outside of version control.</p><div class="row"><div class="span6"><table class="table"></table></div><div class="span2"><div class="control-group"><div class="controls"><div class="input-append"><input type="text" placeholder="Key e.g. MONGODB_URI" class="env-key span2"/><input type="text" placeholder="Value" class="env-val span2"/></div><button class="btn btn-add-env">Add</button></div></div></div></div></fieldset></div></div></div>
+<div id="env" class="tab-pane well">
+  <fieldset>
+    <div class="loading pull-right" ng-show="loading > 0">
+      <i class="icon-spin icon-cog"></i>
+    </div>
+    <legend>Environment Variables</legend>
+    <p>
+      Set custom environment variables to be exported for your
+      test runs. This can be useful for storing configuration
+      outside of version control.
+    </p>
+    <div class="row-fluid">
+      <div class="span8">
+        <table class="table">
+          <thead>
+            <tr>
+              <th>Key</th>
+              <th>Value</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr ng-repeat="vbl in env">
+              <td>[[ vbl.key ]]</td>
+              <td>[[ vbl.value ]]</td>
+              <td class="remove">
+                <span class="clickable" ng-click="remove(vbl)">
+                  <i class="icon-remove" alt="remove"></i>
+                </span>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="span4">
+        <div class="control-group">
+          <div class="controls">
+            <div class="input-append">
+              <input ng-model="new_key" type="text" placeholder="Key e.g. MONGODB_URI" class="span11"/>
+              <input ng-model="new_val" type="text" placeholder="Value" class="span11"/>
+            </div>
+            <button class="btn" ng-click="add()">Add</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </fieldset>
+</div>
