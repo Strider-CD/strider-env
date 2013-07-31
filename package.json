@@ -14,5 +14,8 @@
     "strider"
   ],
   "author": "Niall O'Higgins",
-  "license": "BSD"
+  "license": "BSD",
+  "dependencies": {
+    "lodash": "~1.3.1"
+  }
 }
