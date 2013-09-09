@@ -1,6 +1,6 @@
 {
   "name": "strider-env",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "Configure custom environment variables for your Strider projects",
   "main": "index.js",
   "scripts": {
@@ -19,6 +19,13 @@
     "lodash": "~1.3.1"
   },
   "strider": {
-    "webapp":"./webapp.js"
+    "webapp":"./webapp.js",
+    "panel" : {
+      "src": "./templates/project_config.html",
+      "controller": "EnvironmentCtrl",
+      "title": "Environment",
+      "id": "environment",
+      "data": "env"
+    }
   }
 }
