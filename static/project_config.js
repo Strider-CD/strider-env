@@ -1,7 +1,7 @@
 
 app.controller('EnvironmentCtrl', ['$scope', function ($scope) {
   $scope.env = [];
-  $.each($scope.panelData.environment || {}, function (key, value) {
+  $.each($scope.panelData['strider-env'] || {}, function (key, value) {
     $scope.env.push({key: key, value: value});
   });
 
