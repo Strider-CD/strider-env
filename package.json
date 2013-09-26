@@ -23,7 +23,6 @@
     "webapp": "webapp.js",
     "icon": "icon.png",
     "config": {
-      "savebtn": true,
       "controller": "EnvironmentCtrl"
     }
   },

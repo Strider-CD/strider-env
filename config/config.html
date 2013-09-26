@@ -14,11 +14,11 @@
         </tr>
       </thead>
       <tbody>
-        <tr ng-repeat="vbl in env">
-          <td>[[ vbl.key ]]</td>
-          <td>[[ vbl.value ]]</td>
+        <tr ng-repeat="(key, value) in config">
+          <td>[[ key ]]</td>
+          <td>[[ value ]]</td>
           <td class="remove">
-            <span class="clickable" ng-click="remove(vbl)">
+            <span class="clickable" ng-click="del(key)">
               <i class="icon-remove" alt="remove"></i>
             </span>
           </td>
@@ -26,9 +26,10 @@
         <tr>
           <td><input ng-model="newkey" placeholder="New Key"></td>
           <td><input ng-model="newvalue" placeholder="New Value"></td>
-          <td><button ng-click="config[newkey] = newvalue" class="btn icon-plus"></button></td>
+          <td><button ng-click="add()" class="btn icon-plus"></button></td>
         </tr>
       </tbody>
     </table>
+    <button ng-click="save()">Save</button>
   </fieldset>
 </div>
