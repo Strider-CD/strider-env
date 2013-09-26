@@ -1,0 +1,34 @@
+<div id="env" class="tab-pane well">
+  <fieldset>
+    <legend>Environment Variables</legend>
+    <p>
+      Set custom environment variables to be exported for your
+      test runs. This can be useful for storing configuration
+      outside of version control.
+    </p>
+    <table class="table">
+      <thead>
+        <tr>
+          <th>Key</th>
+          <th>Value</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr ng-repeat="vbl in env">
+          <td>[[ vbl.key ]]</td>
+          <td>[[ vbl.value ]]</td>
+          <td class="remove">
+            <span class="clickable" ng-click="remove(vbl)">
+              <i class="icon-remove" alt="remove"></i>
+            </span>
+          </td>
+        </tr>
+        <tr>
+          <td><input ng-model="newkey" placeholder="New Key"></td>
+          <td><input ng-model="newvalue" placeholder="New Value"></td>
+          <td><button ng-click="config[newkey] = newvalue" class="btn icon-plus"></button></td>
+        </tr>
+      </tbody>
+    </table>
+  </fieldset>
+</div>
