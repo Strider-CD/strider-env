@@ -1,12 +1,9 @@
-JADE = $(shell find templates/*.jade)
-HTML = $(JADE:.jade=.html)
 
-all: $(HTML)
+test: lint
 
-%.html: %.jade
-	jade -P < $< --path $< > $@
+tolint := *.js *.json
 
-clean:
-	rm -f $(HTML)
+lint:
+	@jshint --verbose $(tolint)
 
-.PHONY: clean
+.PHONY: test lint
