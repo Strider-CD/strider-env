@@ -1,10 +1,10 @@
 {
   "name": "strider-env",
-  "version": "0.4.2",
+  "version": "0.4.3",
   "description": "Configure custom environment variables for your Strider projects",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "jshint && mocha"
   },
   "repository": {
     "type": "git",
@@ -16,14 +16,19 @@
   "author": "Niall O'Higgins",
   "license": "BSD",
   "strider": {
-      "id": "env",
-      "type": "job",
-      "title": "Environment",
-      "worker": "worker.js",
-      "webapp": "webapp.js",
-      "config": true
+    "id": "env",
+    "type": "job",
+    "title": "Environment",
+    "worker": "worker.js",
+    "webapp": "webapp.js",
+    "config": true
   },
   "dependencies": {
     "lodash": "~1.3.1"
+  },
+  "devDependencies": {
+    "chai": "~1.8.1",
+    "jshint": "~2.3.0",
+    "mocha": "~1.14.0"
   }
 }
