@@ -21,6 +21,7 @@
     "title": "Environment",
     "worker": "worker.js",
     "webapp": "webapp.js",
+    "icon": "icon.png",
     "config": {
       "controller": "EnvironmentCtrl"
     }
