@@ -28,6 +28,11 @@
           <td><input ng-model="newvalue" placeholder="New Value" type="text"></td>
           <td><button ng-click="add()" class="btn btn-success">Add</button></td>
         </tr>
+        <tr>
+          <td>Select a .env file: <input type="file" fileread="parsedenv.src"></td>
+          <td><span ng-bind="filereadstatus"></span></td>
+          <td><button ng-click="upload()" class="btn btn-primary">Upload</button></td>
+        </tr>
       </tbody>
     </table>
   </fieldset>
