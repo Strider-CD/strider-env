@@ -45,6 +45,34 @@ app.directive("fileread", [function () {
   }
 }]);
 
+app.directive( 'editInPlace', function() {
+  return {
+    restrict: 'E',
+    scope: { value: '=' },
+    template: '<span ng-click="edit()" ng-bind="value"></span><input ng-blur="editdone()" ng-model="value"></input>',
+    link: function ($scope, element, attrs) {
+      var inputElement = angular.element( element.children()[1] );
+
+      element.addClass( 'edit-in-place' );
+      $scope.editing = false;
+
+      $scope.edit = function () {
+        $scope.editing = true;
+        element.addClass('active');
+        inputElement[0].focus();
+      };
+
+      $scope.editdone = function() {
+        $scope.editing = false;
+        element.removeClass('active');
+        gran_papa = $scope.$parent.$parent;
+        gran_papa.setkv(element.attr('envkey'), inputElement.val());
+        gran_papa.save();
+      };
+    }
+  };
+});
+
 app.controller('EnvironmentCtrl', ['$scope', function ($scope) {
   $scope.$watch('configs[branch.name].env.config', function (value) {
     $scope.config = value || {};
@@ -53,6 +81,9 @@ app.controller('EnvironmentCtrl', ['$scope', function ($scope) {
   $scope.parsedenv = {};
   $scope.parsedenv.src = "";
   $scope.filereadstatus = "";
+  $scope.setkv = function (key, value) {
+    $scope.config[key] = value;
+  }
   $scope.save = function () {
     $scope.saving = true;
     $scope.pluginConfig('env', $scope.config, function () {

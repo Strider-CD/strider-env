@@ -16,7 +16,7 @@
       <tbody>
         <tr ng-repeat="(key, value) in config">
           <td>[[ key ]]</td>
-          <td>[[ value ]]</td>
+          <td><edit-in-place envkey="[[ key ]]" value="value"></edit-in-place></td>
           <td class="remove">
             <span class="clickable" ng-click="del(key)">
               <i class="fa fa-remove" alt="remove"></i>
@@ -37,3 +37,21 @@
     </table>
   </fieldset>
 </div>
+
+<style>
+.edit-in-place span {
+  cursor: pointer;
+}
+
+.edit-in-place input {
+  display: none;
+}
+
+.edit-in-place.active span {
+  display: none;
+}
+
+.edit-in-place.active input {
+  display: inline-block;
+}
+</style>
