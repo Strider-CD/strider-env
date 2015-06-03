@@ -16,16 +16,20 @@ app.directive("fileread", [function () {
             env = JSON.parse(fileContents);
           } catch (e) {}
 
-          if (!env) try {
-            var obj = {},
-                lines = fileContents.split("\n");
-
-            for (var i = 0; i < lines.length - 1; i++) {
-              var pair = lines[i].split("=");
-              obj[pair[0].trim()] = pair[1].trim();
+          if (!env) {
+            try {
+              var obj = {},
+                  lines = fileContents.split("\n");
+  
+              for (var i = 0; i < lines.length - 1; i++) {
+                var pair = lines[i].split("=");
+                obj[pair[0].trim()] = pair[1].trim();
+              }
+              env = obj;
+            } catch (e) {
+              console.error(e);
             }
-            env = obj;
-          } catch (e) {}
+          }
 
           if (!env) {
             scope.$apply(function () {
